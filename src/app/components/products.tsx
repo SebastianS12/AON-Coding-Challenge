@@ -15,12 +15,20 @@ export default function Products() {
       fetch('products.json')
         .then(response => response.json())
         .then(json => setData(json));
-    });
+    }, []);
   
     if (!data) {
       return <p>Loading...</p>;
     }
-  
+
+    const addSpaghettiItem = () => {
+      let id = data.length > 0 ? Number(data.reduce((a,b)=>a.id>b.id?a:b).id) + 1 : 1;
+      setData(prevData => [...prevData, { id: id, name: "Spaghetti" }]);
+    };
+
+    const removeLastItem = () => {
+      setData(prevData => prevData.slice(0,-1));
+    };
 
     return (
         <div>
@@ -29,9 +37,10 @@ export default function Products() {
           <li key={item.id}>{item.name}</li>
         ))}
       </ul>
-      <button onClick={()=> {const newdata =  data.concat({id:"5", name: "Spaghetti"}); setData(newdata)}} value="Spaghetti">
+      <button onClick={addSpaghettiItem} value="Spaghetti">
       Add Spaghetti
     </button>
+          <button onClick={removeLastItem}>Remove last item</button>
     </div>      
     );
   }
